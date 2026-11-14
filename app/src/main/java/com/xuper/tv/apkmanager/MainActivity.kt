@@ -15,6 +15,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -36,7 +38,7 @@ class MainActivity : ComponentActivity() {
             val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             if (id == activeDownloadId) {
                 val query = DownloadManager.Query().setFilterById(activeDownloadId)
-                val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                val manager = context.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
                 val cursor = manager.query(query)
                 if (cursor != null && cursor.moveToFirst()) {
                     val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
@@ -119,7 +121,7 @@ class MainActivity : ComponentActivity() {
             setAllowedOverRoaming(true)
         }
 
-        val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val manager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
         activeDownloadId = manager.enqueue(request)
     }
 
@@ -155,6 +157,14 @@ fun MainScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Auris-Store APK Manager") },
+                actions = {
+                    IconButton(onClick = { viewModel.fetchApks() }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Recargar aplicaciones"
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
