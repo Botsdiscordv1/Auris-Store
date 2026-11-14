@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.xuper.tv.apkmanager"
+    namespace = "com.auris.store.oficial"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.xuper.tv.apkmanager"
+        applicationId = "com.auris.store.oficial"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
