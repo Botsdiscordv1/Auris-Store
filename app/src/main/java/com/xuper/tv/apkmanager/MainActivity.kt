@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.xuper.tv.apkmanager.data.GitHubFile
+import com.xuper.tv.apkmanager.data.ApkFile
 import com.xuper.tv.apkmanager.ui.ApkListViewModel
 import com.xuper.tv.apkmanager.ui.UiState
 import java.io.File
@@ -104,15 +104,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun downloadAndInstallApk(apk: GitHubFile) {
-        val url = apk.download_url ?: return
+    private fun downloadAndInstallApk(apk: ApkFile) {
+        val url = apk.downloadUrl
         val fileName = apk.name
         
         Toast.makeText(this, "Iniciando descarga de $fileName...", Toast.LENGTH_SHORT).show()
 
         val request = DownloadManager.Request(Uri.parse(url)).apply {
             setTitle(fileName)
-            setDescription("Descargando XuperTV APK...")
+            setDescription("Descargando Auris-Store APK...")
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             setDestinationInExternalFilesDir(this@MainActivity, Environment.DIRECTORY_DOWNLOADS, fileName)
             setAllowedOverMetered(true)
@@ -147,14 +147,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(
     viewModel: ApkListViewModel = viewModel(),
-    onDownloadClick: (GitHubFile) -> Unit
+    onDownloadClick: (ApkFile) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("XuperTV APK Manager") },
+                title = { Text("Auris-Store APK Manager") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -210,10 +210,10 @@ fun MainScreen(
 
 @Composable
 fun ApkItemCard(
-    apk: GitHubFile,
+    apk: ApkFile,
     onDownloadClick: () -> Unit
 ) {
-    val sizeMb = String.format("%.2f MB", apk.size / (1024.0 * 1024.0))
+    val sizeMb = if (apk.size > 0) String.format("%.2f MB", apk.size / (1024.0 * 1024.0)) else "Tamaño desconocido"
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -230,7 +230,7 @@ fun ApkItemCard(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Tamaño: $sizeMb",
+                text = "Ruta: ${apk.path} | $sizeMb",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

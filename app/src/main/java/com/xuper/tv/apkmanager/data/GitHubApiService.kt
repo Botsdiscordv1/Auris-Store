@@ -6,12 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface GitHubApiService {
-    @GET("repos/{owner}/{repo}/contents/{path}")
-    suspend fun getRepositoryContents(
+    @GET("repos/{owner}/{repo}/git/trees/{branch}?recursive=1")
+    suspend fun getRepositoryTree(
         @Path("owner") owner: String,
         @Path("repo") repo: String,
-        @Path("path") path: String = "Xuper"
-    ): List<GitHubFile>
+        @Path("branch") branch: String = "main"
+    ): GitTreeResponse
 
     companion object {
         private const val BASE_URL = "https://api.github.com/"

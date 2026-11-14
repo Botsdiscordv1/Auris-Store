@@ -2,8 +2,8 @@ package com.xuper.tv.apkmanager.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xuper.tv.apkmanager.data.ApkFile
 import com.xuper.tv.apkmanager.data.ApkRepository
-import com.xuper.tv.apkmanager.data.GitHubFile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 sealed interface UiState {
     object Loading : UiState
-    data class Success(val apks: List<GitHubFile>) : UiState
+    data class Success(val apks: List<ApkFile>) : UiState
     data class Error(val message: String) : UiState
 }
 
